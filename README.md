@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.caseyscarborough:pastebin-api-java:0.0.1'
+    implementation 'com.github.caseyscarborough:pastebin-api-java:0.0.2'
 }
 ```
 
