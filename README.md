@@ -2,6 +2,20 @@
 
 This is a simple Java API client for the pastebin.com API.
 
+## Dependency
+
+Add the following to your build.gradle:
+
+```groovy
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    implementation 'com.github.caseyscarborough:pastebin-api-java:0.0.1'
+}
+```
+
 ## Usage
 
 Create a new client using the `PastebinClient` builder:
