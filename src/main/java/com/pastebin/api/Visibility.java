@@ -1,6 +1,6 @@
 package com.pastebin.api;
 
-public enum PastebinVisibility {
+public enum Visibility {
 
     PRIVATE(2),
     UNLISTED(1),
@@ -8,7 +8,7 @@ public enum PastebinVisibility {
 
     private final int code;
 
-    PastebinVisibility(int code) {
+    Visibility(int code) {
         this.code = code;
     }
 

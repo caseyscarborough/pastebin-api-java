@@ -1,7 +1,7 @@
 package com.pastebin.api.request;
 
-import com.pastebin.api.PastebinFormat;
-import com.pastebin.api.PastebinVisibility;
+import com.pastebin.api.Format;
+import com.pastebin.api.Visibility;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,13 +9,13 @@ import java.util.Map;
 public class PasteRequest implements Request {
 
     private final String content;
-    private final PastebinFormat format;
-    private final PastebinVisibility visibility;
+    private final Format format;
+    private final Visibility visibility;
     private final String name;
 
     //todo - add expire date and folder key
 
-    private PasteRequest(String content, PastebinFormat format, PastebinVisibility visibility, String name) {
+    private PasteRequest(String content, Format format, Visibility visibility, String name) {
         this.content = content;
         this.format = format;
         this.visibility = visibility;
@@ -47,20 +47,20 @@ public class PasteRequest implements Request {
 
     public static class Builder {
         private final String content;
-        private PastebinFormat format;
-        private PastebinVisibility visibility;
+        private Format format;
+        private Visibility visibility;
         private String name;
 
         public Builder(String content) {
             this.content = content;
         }
 
-        public Builder format(final PastebinFormat format) {
+        public Builder format(final Format format) {
             this.format = format;
             return this;
         }
 
-        public Builder visibility(final PastebinVisibility visibility) {
+        public Builder visibility(final Visibility visibility) {
             this.visibility = visibility;
             return this;
         }

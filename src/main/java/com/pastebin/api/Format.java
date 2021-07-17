@@ -1,7 +1,7 @@
 
 package com.pastebin.api;
 
-public enum PastebinFormat {
+public enum Format {
 
     _4CS("4cs", "4CS"),
     _6502ACME("6502acme", "6502 ACME Cross Asse..."),
@@ -273,7 +273,7 @@ public enum PastebinFormat {
     final String code;
     final String name;
 
-    PastebinFormat(String code, String name) {
+    Format(String code, String name) {
         this.code = code;
         this.name = name;
     }

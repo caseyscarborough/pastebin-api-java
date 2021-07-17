@@ -23,8 +23,8 @@ public class Example {
 
         final PasteRequest request = PasteRequest
             .content("print(\"Hello, world!\")")
-            .visibility(PastebinVisibility.PRIVATE)
-            .format(PastebinFormat.PYTHON)
+            .visibility(Visibility.PRIVATE)
+            .format(Format.PYTHON)
             .name("Hello World in Python")
             .build();
 
