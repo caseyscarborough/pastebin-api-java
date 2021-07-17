@@ -2,7 +2,7 @@ package com.pastebin.api;
 
 import com.pastebin.api.request.PasteRequest;
 
-public class Example {
+final class Example {
 
     public static void main(String[] args) {
         final PastebinClient client = PastebinClient
