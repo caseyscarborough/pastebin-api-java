@@ -31,7 +31,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.pastebin.api:pastebin-api-java:0.1.1'
+    implementation 'com.pastebin.api:pastebin-api:0.1.1'
 }
 ```
 
