@@ -1,6 +1,6 @@
 # Pastebin API Java Client
 
-This is a easy-to-use and fluet Java API client for the pastebin.com API.
+This is a easy-to-use and fluent Java API client for the pastebin.com API.
 
 ## Requirements
 
