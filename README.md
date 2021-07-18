@@ -2,6 +2,11 @@
 
 This is a easy-to-use and fluet Java API client for the pastebin.com API.
 
+## Requirements
+
+- Java 8+
+- Maven or Gradle
+
 ## Dependency
 
 You can use either Jitpack or GitHub Packages for including this in your project. Add either of the following to your `build.gradle` file:
