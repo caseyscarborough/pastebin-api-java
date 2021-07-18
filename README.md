@@ -82,6 +82,8 @@ final String url = client.paste(request);
 System.out.println(url);
 ```
 
+There are many different [formats](https://github.com/caseyscarborough/pastebin-api-java/blob/master/src/main/java/com/pastebin/api/Format.java) and [expirations](https://github.com/caseyscarborough/pastebin-api-java/blob/master/src/main/java/com/pastebin/api/Expiration.java) to choose from.
+
 ### List Your Pastes
 
 Retrieve a list of your pastes. This takes a single parameter, the amount of pastes to return. It defaults to 50 with a min of 1 and a max of 100.
@@ -133,4 +135,16 @@ This is for any public or unlisted paste (does not need to be your own account).
 
 ```java
 client.getPaste("BPaf5niB");
+```
+
+## Error Handling
+
+If an error is returned from the API, the client will throw a `PastebinException`.
+
+```java
+try {
+    final String raw = client.getPaste("af30fj21");
+} catch (PastebinException e) {
+    logger.error("An error occurred retrieving paste", e);
+}
 ```
