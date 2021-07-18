@@ -25,7 +25,7 @@ final PastebinClient client = PastebinClient
     .builder()
     .developerKey("my-developer-key")
     // optional
-    .userKey("my-user-key") 
+    .userKey("my-user-key")
     .build();
 ```
 
@@ -41,9 +41,13 @@ Create a new paste.
 ```java
 final PasteRequest request = PasteRequest
     .content("print(\"Hello, world!\")")
+    // the remaining fields are optional
     .visibility(Visibility.PRIVATE)
     .format(Format.PYTHON)
     .name("Hello World in Python")
+    .expiration(Expiration.ONE_HOUR)
+    // the folder key can be found in the URL of your folder
+    .folderKey("N2a8jwyY")
     .build();
 
 // returns the URL of the newly created paste.
