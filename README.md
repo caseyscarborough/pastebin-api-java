@@ -18,6 +18,10 @@ dependencies {
 
 ## Usage
 
+See the [Example.java](https://github.com/caseyscarborough/pastebin-api-java/blob/master/src/main/java/com/pastebin/api/Example.java) for a complete API example.
+
+### Create a New Client
+
 Create a new client using the `PastebinClient` builder:
 
 ```java
@@ -29,6 +33,8 @@ final PastebinClient client = PastebinClient
     .build();
 ```
 
+### Login/Create User Key
+
 Retrieve a user key if you don't already have one, and you would like to create pastes that are associated with your account. This will automatically assign the user key to the client for reuse in later calls.
 
 ```java
@@ -36,7 +42,9 @@ final String userKey = client.login("username", "password");
 System.out.println(userKey);
 ```
 
-Create a new paste.
+### Create a New Paste
+
+You can create a new paste here. All fields are optional except for `content`.
 
 ```java
 final PasteRequest request = PasteRequest
@@ -55,9 +63,55 @@ final String url = client.paste(request);
 System.out.println(url);
 ```
 
-## TODO
+### List Your Pastes
 
-- Add support for listing pastes for a specific user.
-- Add paste deletion.
-- Retrieving user information and settings.
-- Get raw output of user's pastes including 'private' pastes.
+Retrieve a list of your pastes. This takes a single parameter, the amount of pastes to return. It defaults to 50 with a min of 1 and a max of 100.
+
+```java
+// Get a list of pastes on your account.
+final List<Paste> pastes = client.list(5);
+for (Paste paste : pastes) {
+    System.out.println("Title: " + paste.getTitle());
+    System.out.println("Key: " + paste.getKey());
+    System.out.println("URL: " + paste.getUrl());
+    System.out.println("Date: " + paste.getDate());
+    System.out.println("Expiration: " + paste.getExpiration());
+    System.out.println("Format: " + paste.getFormat().getName());
+    System.out.println("Size: " + paste.getSize());
+    System.out.println("Hits: " + paste.getHits());
+    System.out.println("Visibility: " + paste.getVisibility().getName());
+    System.out.println();
+}
+```
+
+### Get Account Details
+
+Retrieve your accounts information:
+
+```java
+final User user = client.user();
+```
+
+### Delete a Paste
+
+Delete a paste on your account:
+
+```java
+client.delete("qHrK7Tq7");
+```
+
+### Retrieve a Paste from Your Account
+
+This is used to retrieve a paste from your account. Can be any public, private, or unlisted paste.
+
+```java
+client.getUserPaste("HWAfaWmg");
+```
+
+### Retrieve a Public or Unlisted Paste
+
+This is for any public or unlisted paste (does not need to be your own account).
+
+```java
+client.getPaste("BPaf5niB");
+```
