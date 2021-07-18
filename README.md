@@ -1,10 +1,12 @@
 # Pastebin API Java Client
 
-This is a simple Java API client for the pastebin.com API.
+This is a easy-to-use and fluet Java API client for the pastebin.com API.
 
 ## Dependency
 
-Add the following to your build.gradle:
+You can use either Jitpack or GitHub Packages for including this in your project. Add either of the following to your `build.gradle` file:
+
+### Jitpack
 
 ```groovy
 repositories {
@@ -12,7 +14,19 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.caseyscarborough:pastebin-api-java:0.0.2'
+    implementation 'com.github.caseyscarborough:pastebin-api-java:0.1.0'
+}
+```
+
+### GitHub
+
+```groovy
+repositories {
+    maven { url 'https://maven.pkg.github.com/caseyscarborough/pastebin-api-java' }
+}
+
+dependencies {
+    implementation 'com.pastebin.api:pastebin-api-java:0.1.0'
 }
 ```
 
@@ -89,7 +103,7 @@ for (Paste paste : pastes) {
 Retrieve your accounts information:
 
 ```java
-final User user = client.user();
+client.user();
 ```
 
 ### Delete a Paste
