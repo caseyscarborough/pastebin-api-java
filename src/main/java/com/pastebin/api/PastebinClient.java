@@ -177,7 +177,10 @@ public class PastebinClient {
             }
             final String body = responseBody.string();
             if (body.toLowerCase(Locale.ROOT).startsWith("bad api request")) {
-                throw new PastebinException(body.split(", ")[1]);
+                if (body.contains(", ")) {
+                    throw new PastebinException(body.substring(body.indexOf(", ") + 2));
+                }
+                throw new PastebinException(body);
             }
             return body;
         } catch (IOException e) {
