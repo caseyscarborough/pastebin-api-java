@@ -7,6 +7,9 @@ plugins {
 group 'com.pastebin.api'
 version project.hasProperty('version') ? version : '0.0.1'
 
+sourceCompatibility = 8
+targetCompatibility = 8
+
 repositories {
     mavenCentral()
 }
@@ -22,7 +25,6 @@ dependencies {
 test {
     useJUnitPlatform()
 }
-
 
 publishing {
     repositories {

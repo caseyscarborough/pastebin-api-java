@@ -20,6 +20,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -146,7 +147,13 @@ public class PastebinClient {
             if (!first) {
                 postBody.append("&");
             }
-            postBody.append(entry.getKey()).append("=").append(URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8));
+
+            try {
+                postBody.append(entry.getKey()).append("=").append(URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8.toString()));
+            } catch (UnsupportedEncodingException e) {
+                throw new IllegalStateException("Could not find UTF-8 encoding (this should never happen)");
+            }
+
             first = false;
         }
 
