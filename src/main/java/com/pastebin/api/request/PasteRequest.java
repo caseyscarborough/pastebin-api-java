@@ -1,5 +1,6 @@
 package com.pastebin.api.request;
 
+import com.pastebin.api.Expiration;
 import com.pastebin.api.Format;
 import com.pastebin.api.Visibility;
 
@@ -12,14 +13,16 @@ public class PasteRequest implements Request {
     private final Format format;
     private final Visibility visibility;
     private final String name;
+    private final Expiration expiration;
+    private final String folderKey;
 
-    //todo - add expire date and folder key
-
-    private PasteRequest(String content, Format format, Visibility visibility, String name) {
+    private PasteRequest(String content, Format format, Visibility visibility, String name, Expiration expiration, String folderKey) {
         this.content = content;
         this.format = format;
         this.visibility = visibility;
         this.name = name;
+        this.expiration = expiration;
+        this.folderKey = folderKey;
     }
 
     public static Builder content(final String content) {
@@ -42,6 +45,14 @@ public class PasteRequest implements Request {
             parameters.put("api_paste_name", this.name);
         }
 
+        if (this.expiration != null) {
+            parameters.put("api_paste_expire_date", this.expiration.getCode());
+        }
+
+        if (this.folderKey != null) {
+            parameters.put("api_folder_key", this.folderKey);
+        }
+
         return parameters;
     }
 
@@ -50,6 +61,8 @@ public class PasteRequest implements Request {
         private Format format;
         private Visibility visibility;
         private String name;
+        private Expiration expiration;
+        private String folderKey;
 
         public Builder(String content) {
             this.content = content;
@@ -70,8 +83,18 @@ public class PasteRequest implements Request {
             return this;
         }
 
+        public Builder expiration(final Expiration expiration) {
+            this.expiration = expiration;
+            return this;
+        }
+
+        public Builder folderKey(final String folderKey) {
+            this.folderKey = folderKey;
+            return this;
+        }
+
         public PasteRequest build() {
-            return new PasteRequest(content, format, visibility, name);
+            return new PasteRequest(content, format, visibility, name, expiration, folderKey);
         }
     }
 }

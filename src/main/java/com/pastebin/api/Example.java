@@ -26,6 +26,8 @@ final class Example {
             .visibility(Visibility.PRIVATE)
             .format(Format.PYTHON)
             .name("Hello World in Python")
+            .expiration(Expiration.ONE_HOUR)
+            .folderKey("Y4Z9DqQk")
             .build();
 
         final String url = client.paste(request);
