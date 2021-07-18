@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.caseyscarborough:pastebin-api-java:0.1.0'
+    implementation 'com.github.caseyscarborough:pastebin-api-java:0.1.1'
 }
 ```
 
@@ -31,7 +31,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.pastebin.api:pastebin-api-java:0.1.0'
+    implementation 'com.pastebin.api:pastebin-api-java:0.1.1'
 }
 ```
 
