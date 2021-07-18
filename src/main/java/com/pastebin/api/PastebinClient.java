@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.pastebin.api.model.Paste;
 import com.pastebin.api.model.User;
+import com.pastebin.api.request.DeleteRequest;
 import com.pastebin.api.request.ListRequest;
 import com.pastebin.api.request.PasteRequest;
 import com.pastebin.api.request.UserRequest;
@@ -59,7 +60,7 @@ public class PastebinClient {
 
     public User user() {
         if (this.userKey == null) {
-            throw new IllegalStateException("Cannot retrieve user without user key. Please call login method first.");
+            throw new IllegalStateException("Cannot retrieve user without user key. Please call login method first or provide user key to PastebinClient.");
         }
 
         final String xml = request("api_post.php", new UserRequest().getParameters());
@@ -71,7 +72,16 @@ public class PastebinClient {
         }
     }
 
-    public List<Paste> list(ListRequest request) {
+    public List<Paste> list() {
+        return list(null);
+    }
+
+    public List<Paste> list(Integer limit) {
+        if (this.userKey == null) {
+            throw new IllegalStateException("Cannot retrieve list of pastes without user key. Please call login method first or provide user key to PastebinClient.");
+        }
+
+        ListRequest request = limit != null ? ListRequest.limit(limit) : new ListRequest();
         final String xml = request("api_post.php", request.getParameters());
         if (xml.toLowerCase(Locale.ROOT).contains("no pastes found")) {
             return new ArrayList<>();
@@ -88,6 +98,17 @@ public class PastebinClient {
 
     public String paste(final PasteRequest request) {
         return request("api_post.php", request.getParameters());
+    }
+
+    public void delete(final String pasteKey) {
+        if (this.userKey == null) {
+            throw new IllegalStateException("Cannot delete paste without user key. Please call login method first or provide user key to PastebinClient.");
+        }
+
+        final String response = request("api_post.php", DeleteRequest.pasteKey(pasteKey).getParameters());
+        if (!response.toLowerCase(Locale.ROOT).contains("paste removed")) {
+            throw new PastebinException("Could not delete paste: " + response);
+        }
     }
 
     private String request(final String endpoint, final Map<String, String> parameters) {

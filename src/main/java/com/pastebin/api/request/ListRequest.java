@@ -45,11 +45,11 @@ public class ListRequest implements Request {
         }
 
         public ListRequest build() {
-            if (this.limit < 1) {
+            if (this.limit != null && this.limit < 1) {
                 throw new IllegalArgumentException("Limit minimum is 1");
             }
 
-            if (this.limit > 100) {
+            if (this.limit != null && this.limit > 100) {
                 throw new IllegalArgumentException("Limit maximum is 100");
             }
 

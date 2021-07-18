@@ -2,7 +2,6 @@ package com.pastebin.api;
 
 import com.pastebin.api.model.Paste;
 import com.pastebin.api.model.User;
-import com.pastebin.api.request.ListRequest;
 import com.pastebin.api.request.PasteRequest;
 
 import java.util.List;
@@ -38,8 +37,7 @@ final class Example {
         final String url = client.paste(pasteRequest);
         System.out.println(url);
 
-        final ListRequest listRequest = ListRequest.limit(5);
-        final List<Paste> pastes = client.list(listRequest);
+        final List<Paste> pastes = client.list(5);
         for (Paste paste : pastes) {
             System.out.println();
             System.out.println("Paste " + paste.getTitle());
@@ -55,5 +53,7 @@ final class Example {
 
         final User user = client.user();
         System.out.println(user);
+
+        client.delete("qHrK7Tq7");
     }
 }
