@@ -1,6 +1,7 @@
 package com.pastebin.api;
 
 import com.pastebin.api.model.Paste;
+import com.pastebin.api.model.User;
 import com.pastebin.api.request.ListRequest;
 import com.pastebin.api.request.PasteRequest;
 
@@ -51,5 +52,8 @@ final class Example {
             System.out.println("  - Hits: " + paste.getHits());
             System.out.println("  - Visibility: " + paste.getVisibility().getName());
         }
+
+        final User user = client.user();
+        System.out.println(user);
     }
 }

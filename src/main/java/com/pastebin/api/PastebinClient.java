@@ -3,9 +3,13 @@ package com.pastebin.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.pastebin.api.model.Paste;
+import com.pastebin.api.model.User;
 import com.pastebin.api.request.ListRequest;
 import com.pastebin.api.request.PasteRequest;
+import com.pastebin.api.request.UserRequest;
+import com.pastebin.api.response.ListResponse;
 import com.pastebin.api.response.ListResponseItem;
+import com.pastebin.api.response.UserResponse;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -17,7 +21,6 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -54,6 +57,20 @@ public class PastebinClient {
         return this.userKey;
     }
 
+    public User user() {
+        if (this.userKey == null) {
+            throw new IllegalStateException("Cannot retrieve user without user key. Please call login method first.");
+        }
+
+        final String xml = request("api_post.php", new UserRequest().getParameters());
+        try {
+            final UserResponse response = mapper.readValue(xml, UserResponse.class);
+            return new UserResponseConverter().convert(response);
+        } catch (JsonProcessingException e) {
+            throw new PastebinException("Could not parse response from Pastebin API: " + e.getMessage(), e);
+        }
+    }
+
     public List<Paste> list(ListRequest request) {
         final String xml = request("api_post.php", request.getParameters());
         if (xml.toLowerCase(Locale.ROOT).contains("no pastes found")) {
@@ -61,9 +78,9 @@ public class PastebinClient {
         }
 
         try {
-            final ListResponseItem[] items = mapper.readValue("<response>" + xml + "</response>", ListResponseItem[].class);
+            final ListResponse response = mapper.readValue("<response>" + xml + "</response>", ListResponse.class);
             Converter<List<ListResponseItem>, List<Paste>> converter = new ListResponseConverter();
-            return converter.convert(Arrays.asList(items));
+            return converter.convert(response.getItems());
         } catch (JsonProcessingException e) {
             throw new PastebinException("Could not parse response from Pastebin API: " + e.getMessage(), e);
         }
