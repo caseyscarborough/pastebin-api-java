@@ -7,6 +7,7 @@ import com.pastebin.api.model.User;
 import com.pastebin.api.request.DeleteRequest;
 import com.pastebin.api.request.ListRequest;
 import com.pastebin.api.request.PasteRequest;
+import com.pastebin.api.request.ShowPasteRequest;
 import com.pastebin.api.request.UserRequest;
 import com.pastebin.api.response.ListResponse;
 import com.pastebin.api.response.ListResponseItem;
@@ -54,7 +55,7 @@ public class PastebinClient {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("api_user_name", username);
         parameters.put("api_user_password", password);
-        this.userKey = request("api_login.php", parameters);
+        this.userKey = post("api_login.php", parameters);
         return this.userKey;
     }
 
@@ -63,7 +64,7 @@ public class PastebinClient {
             throw new IllegalStateException("Cannot retrieve user without user key. Please call login method first or provide user key to PastebinClient.");
         }
 
-        final String xml = request("api_post.php", new UserRequest().getParameters());
+        final String xml = post("api_post.php", new UserRequest().getParameters());
         try {
             final UserResponse response = mapper.readValue(xml, UserResponse.class);
             return new UserResponseConverter().convert(response);
@@ -82,7 +83,7 @@ public class PastebinClient {
         }
 
         ListRequest request = limit != null ? ListRequest.limit(limit) : new ListRequest();
-        final String xml = request("api_post.php", request.getParameters());
+        final String xml = post("api_post.php", request.getParameters());
         if (xml.toLowerCase(Locale.ROOT).contains("no pastes found")) {
             return new ArrayList<>();
         }
@@ -97,7 +98,18 @@ public class PastebinClient {
     }
 
     public String paste(final PasteRequest request) {
-        return request("api_post.php", request.getParameters());
+        return post("api_post.php", request.getParameters());
+    }
+
+    public String getUserPaste(final String pasteKey) {
+        if (this.userKey == null) {
+            throw new IllegalStateException("Cannot get a user's paste without user key. Please call login method first or provide user key to PastebinClient.");
+        }
+        return post("api_raw.php", ShowPasteRequest.pasteKey(pasteKey).getParameters());
+    }
+
+    public String getPaste(final String pasteKey) {
+        return raw(pasteKey);
     }
 
     public void delete(final String pasteKey) {
@@ -105,13 +117,29 @@ public class PastebinClient {
             throw new IllegalStateException("Cannot delete paste without user key. Please call login method first or provide user key to PastebinClient.");
         }
 
-        final String response = request("api_post.php", DeleteRequest.pasteKey(pasteKey).getParameters());
+        final String response = post("api_post.php", DeleteRequest.pasteKey(pasteKey).getParameters());
         if (!response.toLowerCase(Locale.ROOT).contains("paste removed")) {
             throw new PastebinException("Could not delete paste: " + response);
         }
     }
 
-    private String request(final String endpoint, final Map<String, String> parameters) {
+    private String raw(final String pasteKey) {
+        final String url = "https://pastebin.com/raw/" + pasteKey;
+        final Request request = new Request.Builder()
+            .url(url)
+            .build();
+        try (Response response = client.newCall(request).execute()) {
+            final ResponseBody responseBody = response.body();
+            if (responseBody == null) {
+                throw new PastebinException("Could not get response body from " + url);
+            }
+            return responseBody.string();
+        } catch (IOException e) {
+            throw new PastebinException("Unable to make request to to " + url + ": " + e.getMessage(), e);
+        }
+    }
+
+    private String post(final String endpoint, final Map<String, String> parameters) {
         StringBuilder postBody = new StringBuilder();
         boolean first = true;
         for (Map.Entry<String, String> entry : parameters.entrySet()) {
