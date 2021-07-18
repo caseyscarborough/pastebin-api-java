@@ -48,7 +48,7 @@ public class PastebinClient {
         return new Builder();
     }
 
-    public String login(final String username, final String password) {
+    public String login(final String username, final String password) throws PastebinException {
         if (this.userKey != null) {
             return this.userKey;
         }
@@ -60,7 +60,7 @@ public class PastebinClient {
         return this.userKey;
     }
 
-    public User user() {
+    public User user() throws PastebinException {
         if (this.userKey == null) {
             throw new IllegalStateException("Cannot retrieve user without user key. Please call login method first or provide user key to PastebinClient.");
         }
@@ -74,11 +74,11 @@ public class PastebinClient {
         }
     }
 
-    public List<Paste> list() {
+    public List<Paste> list() throws PastebinException {
         return list(null);
     }
 
-    public List<Paste> list(Integer limit) {
+    public List<Paste> list(Integer limit) throws PastebinException {
         if (this.userKey == null) {
             throw new IllegalStateException("Cannot retrieve list of pastes without user key. Please call login method first or provide user key to PastebinClient.");
         }
@@ -98,11 +98,11 @@ public class PastebinClient {
         }
     }
 
-    public String paste(final PasteRequest request) {
+    public String paste(final PasteRequest request) throws PastebinException {
         return post("api_post.php", request.getParameters());
     }
 
-    public String getUserPaste(final String pasteKey) {
+    public String getUserPaste(final String pasteKey) throws PastebinException {
         if (this.userKey == null) {
             throw new IllegalStateException("Cannot get a user's paste without user key. Please call login method first or provide user key to PastebinClient.");
         }
@@ -113,7 +113,7 @@ public class PastebinClient {
         return raw(pasteKey);
     }
 
-    public void delete(final String pasteKey) {
+    public void delete(final String pasteKey) throws PastebinException {
         if (this.userKey == null) {
             throw new IllegalStateException("Cannot delete paste without user key. Please call login method first or provide user key to PastebinClient.");
         }
@@ -124,7 +124,7 @@ public class PastebinClient {
         }
     }
 
-    private String raw(final String pasteKey) {
+    private String raw(final String pasteKey) throws PastebinException {
         final String url = "https://pastebin.com/raw/" + pasteKey;
         final Request request = new Request.Builder()
             .url(url)
