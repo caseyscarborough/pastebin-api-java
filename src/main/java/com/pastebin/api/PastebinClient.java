@@ -32,6 +32,7 @@ import java.util.Map;
 public class PastebinClient {
 
     private static final String BASE_API_URL = "https://pastebin.com/api";
+    private static final String BASE_RAW_URL = "https://pastebin.com/raw";
     private static final MediaType MEDIA_TYPE = MediaType.get("application/x-www-form-urlencoded");
 
     private final String developerKey;
@@ -125,7 +126,7 @@ public class PastebinClient {
     }
 
     private String raw(final String pasteKey) throws PastebinException {
-        final String url = "https://pastebin.com/raw/" + pasteKey;
+        final String url = BASE_RAW_URL + "/" + pasteKey;
         final Request request = new Request.Builder()
             .url(url)
             .build();
