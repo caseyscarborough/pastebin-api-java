@@ -268,7 +268,8 @@ public enum Format {
     YAML("yaml", "YAML"),
     YARA("yara", "YARA"),
     Z80("z80", "Z80 Assembler"),
-    ZXBASIC("zxbasic", "ZXBasic");
+    ZXBASIC("zxbasic", "ZXBasic"),
+    NONE("", "None");
 
     final String code;
     final String name;
@@ -284,5 +285,14 @@ public enum Format {
 
     public String getName() {
         return name;
+    }
+
+    static Format find(final String code) {
+        for (Format value : values()) {
+            if (value.getCode().equals(code)) {
+                return value;
+            }
+        }
+        return NONE;
     }
 }

@@ -32,6 +32,7 @@ public class PasteRequest implements Request {
     @Override
     public Map<String, String> getParameters() {
         Map<String, String> parameters = new HashMap<>();
+        parameters.put("api_option", "paste");
         parameters.put("api_paste_code", content);
         if (this.format != null) {
             parameters.put("api_paste_format", this.format.getCode());
@@ -64,7 +65,7 @@ public class PasteRequest implements Request {
         private Expiration expiration;
         private String folderKey;
 
-        public Builder(String content) {
+        Builder(String content) {
             this.content = content;
         }
 

@@ -1,6 +1,11 @@
 package com.pastebin.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.pastebin.api.model.Paste;
+import com.pastebin.api.request.ListRequest;
 import com.pastebin.api.request.PasteRequest;
+import com.pastebin.api.response.ListResponseItem;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -11,7 +16,10 @@ import okhttp3.ResponseBody;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -22,6 +30,7 @@ public class PastebinClient {
 
     private final String developerKey;
     private final OkHttpClient client = new OkHttpClient();
+    private final XmlMapper mapper = new XmlMapper();
     private String userKey;
 
     private PastebinClient(String developerKey, String userKey) {
@@ -41,15 +50,30 @@ public class PastebinClient {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("api_user_name", username);
         parameters.put("api_user_password", password);
-        this.userKey = request("api_login.php", null, parameters);
+        this.userKey = request("api_login.php", parameters);
         return this.userKey;
     }
 
-    public String paste(final PasteRequest request) {
-        return request("api_post.php", "paste", request.getParameters());
+    public List<Paste> list(ListRequest request) {
+        final String xml = request("api_post.php", request.getParameters());
+        if (xml.toLowerCase(Locale.ROOT).contains("no pastes found")) {
+            return new ArrayList<>();
+        }
+
+        try {
+            final ListResponseItem[] items = mapper.readValue("<response>" + xml + "</response>", ListResponseItem[].class);
+            Converter<List<ListResponseItem>, List<Paste>> converter = new ListResponseConverter();
+            return converter.convert(Arrays.asList(items));
+        } catch (JsonProcessingException e) {
+            throw new PastebinException("Could not parse response from Pastebin API: " + e.getMessage(), e);
+        }
     }
 
-    private String request(final String endpoint, final String option, final Map<String, String> parameters) {
+    public String paste(final PasteRequest request) {
+        return request("api_post.php", request.getParameters());
+    }
+
+    private String request(final String endpoint, final Map<String, String> parameters) {
         StringBuilder postBody = new StringBuilder();
         boolean first = true;
         for (Map.Entry<String, String> entry : parameters.entrySet()) {
@@ -61,10 +85,6 @@ public class PastebinClient {
         }
 
         postBody.append("&api_dev_key=").append(developerKey);
-
-        if (option != null) {
-            postBody.append("&api_option=").append(option);
-        }
 
         if (this.userKey != null) {
             postBody.append("&api_user_key=").append(this.userKey);

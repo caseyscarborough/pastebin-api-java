@@ -1,6 +1,10 @@
 package com.pastebin.api;
 
+import com.pastebin.api.model.Paste;
+import com.pastebin.api.request.ListRequest;
 import com.pastebin.api.request.PasteRequest;
+
+import java.util.List;
 
 final class Example {
 
@@ -21,7 +25,7 @@ final class Example {
         );
         System.out.println(userKey);
 
-        final PasteRequest request = PasteRequest
+        final PasteRequest pasteRequest = PasteRequest
             .content("print(\"Hello, world!\")")
             .visibility(Visibility.PRIVATE)
             .format(Format.PYTHON)
@@ -30,7 +34,22 @@ final class Example {
             .folderKey("Y4Z9DqQk")
             .build();
 
-        final String url = client.paste(request);
+        final String url = client.paste(pasteRequest);
         System.out.println(url);
+
+        final ListRequest listRequest = ListRequest.limit(5);
+        final List<Paste> pastes = client.list(listRequest);
+        for (Paste paste : pastes) {
+            System.out.println();
+            System.out.println("Paste " + paste.getTitle());
+            System.out.println("  - Key: " + paste.getKey());
+            System.out.println("  - URL: " + paste.getUrl());
+            System.out.println("  - Date: " + paste.getDate());
+            System.out.println("  - Expiration Date: " + paste.getExpireDate());
+            System.out.println("  - Format: " + paste.getFormat().getName());
+            System.out.println("  - Size: " + paste.getSize());
+            System.out.println("  - Hits: " + paste.getHits());
+            System.out.println("  - Visibility: " + paste.getVisibility().getName());
+        }
     }
 }
