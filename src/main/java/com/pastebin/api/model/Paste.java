@@ -9,7 +9,7 @@ public class Paste {
 
     private String key;
     private LocalDateTime date;
-    private LocalDateTime expireDate;
+    private LocalDateTime expiration;
     private String title;
     private long size;
     private Visibility visibility;
@@ -33,12 +33,12 @@ public class Paste {
         this.date = date;
     }
 
-    public LocalDateTime getExpireDate() {
-        return expireDate;
+    public LocalDateTime getExpiration() {
+        return expiration;
     }
 
-    public void setExpireDate(LocalDateTime expireDate) {
-        this.expireDate = expireDate;
+    public void setExpiration(LocalDateTime expiration) {
+        this.expiration = expiration;
     }
 
     public String getTitle() {

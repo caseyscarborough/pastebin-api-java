@@ -50,7 +50,7 @@ final class Example {
             System.out.println("  - Key: " + paste.getKey());
             System.out.println("  - URL: " + paste.getUrl());
             System.out.println("  - Date: " + paste.getDate());
-            System.out.println("  - Expiration Date: " + paste.getExpireDate());
+            System.out.println("  - Expiration Date: " + paste.getExpiration());
             System.out.println("  - Format: " + paste.getFormat().getName());
             System.out.println("  - Size: " + paste.getSize());
             System.out.println("  - Hits: " + paste.getHits());

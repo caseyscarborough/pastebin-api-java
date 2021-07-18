@@ -23,7 +23,7 @@ class ListResponseConverter implements Converter<List<ListResponseItem>, List<Pa
             paste.setUrl(item.getUrl());
             paste.setHits(item.getHits());
             if (item.getExpireDate() != 0) {
-                paste.setExpireDate(getTimeFromEpoch(item.getExpireDate()));
+                paste.setExpiration(getTimeFromEpoch(item.getExpireDate()));
             }
             paste.setVisibility(Visibility.find(item.getPrivacy()));
             paste.setDate(getTimeFromEpoch(item.getDate()));
